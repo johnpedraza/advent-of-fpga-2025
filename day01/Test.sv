@@ -1,5 +1,5 @@
 /*
-Testbench for Day 1, Part 1
+Testbench for Day 1
 */
 module Test();
     logic clk;
@@ -17,13 +17,15 @@ module Test();
     end
     
     // Day 1 solution module
-    logic [31:0] zero_count;
+    logic [31:0] zero_count_part1;
+    logic [31:0] zero_count_part2;
     logic done;
     Day01 dut(.clk(clk),
               .reset_n(reset_n),
               .puzzle_addr(puzzle_addr),
               .puzzle_char(puzzle_char),
-              .zero_count(zero_count),
+              .zero_count_part1(zero_count_part1),
+              .zero_count_part2(zero_count_part2),
               .done(done)
     );
 
@@ -35,7 +37,7 @@ module Test();
         // Read puzzle memory file (see preprocessor.py)
         $readmemh("input/input.mem", puzzle_input);
 
-        $display("Running test for Day 1, Part 1...\n");
+        $display("Running test for Day 1...\n");
 
         reset_n = 1;
         #1;
@@ -47,7 +49,8 @@ module Test();
             @(posedge clk);
         end
 
-        $display("The password is %d\n", zero_count);
+        $display("Part 1 password: %d\n", zero_count_part1);
+        $display("Part 2 password: %d\n", zero_count_part2);
         
         $finish;
     end

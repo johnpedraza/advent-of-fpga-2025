@@ -7,4 +7,12 @@ reached, calculate the dial's new position and check whether or not it landed
 on zero.
 
 # Day 1 Part 2
-Gotta do something else.
+Add some more logic to account for passing zero position but not landing on it.
+Dedicated logic accounts for the case of multiple full rotations during one
+rotation.
+
+# Results / Performance
+For Part 1, the design processes one character per clock cycle.
+It achieved timing closure at 100MHz for my FPGA, so for the puzzle input size
+of 19,623 characters (including end-of-puzzle indicator char), 
+it generated a result in 196.23 microseconds.

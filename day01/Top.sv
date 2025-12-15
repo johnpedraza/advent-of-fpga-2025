@@ -5,6 +5,7 @@ Synthesizable Day 1 Solution
 module Top(
     input  logic clk,         // 100MHz clock
     input  logic reset_n_raw, // "CPU Reset" button on dev board
+    input  logic part,        // Part 1/2 select switch
     output logic [7:0] an,    // 7-segment display anode select
     output logic [6:0] seg,   // 7-segment display segments
     output logic dp           // 7-segment display decimal point
@@ -38,6 +39,9 @@ module Top(
     
     // Connect to 7-segment display
     logic [31:0] zero_count;
+    logic [31:0] zero_count_part1;
+    logic [31:0] zero_count_part2;
+    assign zero_count = part ? zero_count_part2 : zero_count_part1;
     SevenSegmentDisplay disp(
         .clk(clk),
         .reset_n(reset_n),
@@ -53,6 +57,7 @@ module Top(
                    .reset_n(reset_n),
                    .puzzle_addr(puzzle_addr),
                    .puzzle_char(puzzle_char),
-                   .zero_count(zero_count),
+                   .zero_count_part1(zero_count_part1),
+                   .zero_count_part2(zero_count_part2),
                    .done(done));
 endmodule
