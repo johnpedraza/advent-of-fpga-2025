@@ -1,0 +1,9 @@
+# Verilator Make object directory
+obj_dir/
+
+# Waveform trace files
+*.vcd
+
+# Vivado files
+vivado/
+*.xdc
