@@ -21,7 +21,8 @@ module Day01(
 
     // Dial turning direction
     // Update when an 'L' or 'R' is seen
-    enum logic {LEFT, RIGHT} direction;
+    typedef enum logic {LEFT, RIGHT} direction_t;
+    direction_t direction;
     always_ff @(posedge clk, negedge reset_n) begin
         if (!reset_n) begin
             direction <= LEFT;
@@ -81,9 +82,35 @@ module Day01(
                 .dial_pos(dial_pos),
                 .result_pos(result_pos)); 
 
+    // Pipeline Register
+    logic [31:0] full_rotations_p;
+    direction_t direction_p;
+    logic [7:0] result_pos_p;
+    logic [7:0] dial_pos_p;
+    logic is_newline_p;
+    logic [7:0] puzzle_char_p;
+    always_ff @(posedge clk) begin
+        if (!reset_n) begin
+            full_rotations_p <= 0;
+            direction_p <= LEFT;
+            result_pos_p <= 0;
+            dial_pos_p <= 0;
+            is_newline_p <= 0;
+            puzzle_char_p <= 1;
+        end else begin
+            full_rotations_p <= full_rotations;
+            direction_p <= direction;
+            result_pos_p <= result_pos;
+            dial_pos_p <= dial_pos;
+            is_newline_p <= is_newline;
+            puzzle_char_p <= puzzle_char;
+        end
+    end
+
+
     // number of new zeros for current turn (part 1)
     logic [31:0] new_zeros_part1;
-    assign new_zeros_part1 = {31'd0, result_pos == 0};
+    assign new_zeros_part1 = is_newline_p ? {31'd0, result_pos_p == 0}: 0;
 
     // number of new zeros for current turn (part 2)
     logic [31:0] new_zeros_part2;
@@ -91,17 +118,21 @@ module Day01(
         new_zeros_part2 = 0;
 
         // number of full rotations
-        new_zeros_part2 += full_rotations;
+        new_zeros_part2 += full_rotations_p;
 
-        if (result_pos == 0) begin
+        if (result_pos_p == 0) begin
             // landing on zero
             new_zeros_part2 += 1;
-        end else if (dial_pos != 0) begin
-            if ((direction == LEFT && result_pos > dial_pos)
-             || (direction == RIGHT && result_pos < dial_pos)) begin
+        end else if (dial_pos_p != 0) begin
+            if ((direction_p == LEFT && result_pos_p > dial_pos_p)
+             || (direction_p == RIGHT && result_pos_p < dial_pos_p)) begin
                 // passing 0 position (but not part of a full 100 tick rotation) 
                 new_zeros_part2 += 1;
             end
+        end
+
+        if (!is_newline_p) begin
+            new_zeros_part2 = 0;
         end
     end
 
@@ -119,7 +150,7 @@ module Day01(
         if (!reset_n) begin
             zero_count_part1 <= 0;
             zero_count_part2 <= 0;
-        end else if (is_newline) begin
+        end else begin
             zero_count_part1 <= zero_count_part1 + new_zeros_part1;
             zero_count_part2 <= zero_count_part2 + new_zeros_part2;
         end
@@ -130,7 +161,7 @@ module Day01(
         if (!reset_n) begin
             done <= 0;
         end else begin
-            done <= (puzzle_char == 0) ? 1 : 0;
+            done <= (puzzle_char_p == 0) ? 1 : 0;
         end
     end
 endmodule

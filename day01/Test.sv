@@ -49,8 +49,8 @@ module Test();
             @(posedge clk);
         end
 
-        $display("Part 1 password: %d\n", zero_count_part1);
-        $display("Part 2 password: %d\n", zero_count_part2);
+        $display("Part 1 password: %d (0x%h)\n", zero_count_part1, zero_count_part1);
+        $display("Part 2 password: %d (0x%h)\n", zero_count_part2, zero_count_part2);
         
         $finish;
     end
