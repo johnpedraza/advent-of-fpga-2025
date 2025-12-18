@@ -25,7 +25,7 @@ and [Surfer](https://surfer-project.org/) as my waveform viewer.
 ```
 cd dayXX
 
-verilator --binary --trace-vcd Test.sv
+verilator --binary --trace-vcd --top-module Test Test.sv ../lib/*.sv
 
 ./obj_dir/VTest
 ```

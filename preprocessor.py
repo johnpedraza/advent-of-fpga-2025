@@ -3,8 +3,8 @@
 # The spacing of the numbers does affect how $readmemh puts the data into
 # the array
 
-PUZZLE_INPUT = "input.txt"
-MEM_FILE = "input.mem"
+PUZZLE_INPUT = "day01/input/input.txt"
+MEM_FILE = "day01/input/input.mem"
 
 with open(PUZZLE_INPUT, 'r') as ifile, open(MEM_FILE, 'w') as memfile:
     for line in ifile:
