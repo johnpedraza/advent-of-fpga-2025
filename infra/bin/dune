@@ -1,0 +1,6 @@
+(library
+ (name aof_infra_generate)
+ (libraries core hardcaml aof_infra)
+ (preprocess
+  (pps ppx_hardcaml ppx_jane))
+ (inline_tests))

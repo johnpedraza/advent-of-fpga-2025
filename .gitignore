@@ -1,0 +1,8 @@
+# OCaml build files
+_build/
+
+# Vivado stuff
+vivado/
+
+# Constraints file (Nexys A7)
+constraints.xdc
