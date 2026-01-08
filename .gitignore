@@ -1,8 +1,13 @@
 # OCaml build files
 _build/
+*.bc
+*.exe
 
 # Vivado stuff
 vivado/
 
 # Constraints file (Nexys A7)
 constraints.xdc
+
+# Puzzle inputs
+input/

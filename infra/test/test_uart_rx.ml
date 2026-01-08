@@ -37,7 +37,9 @@ let testbench (sim : Harness.Sim.t) =
   inputs.reset_n := Bits.vdd;
   cycle ();
   (* idle high for some time *)
-  let full_period = 868 in
+  let clock_freq = 100_000_000 in
+  let baud_rate = 115_200 in
+  let full_period = clock_freq / baud_rate in
   inputs.rx := Bits.vdd;
   for _ = 1 to full_period * 50 do
     cycle ()
