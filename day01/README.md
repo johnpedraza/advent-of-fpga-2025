@@ -1,17 +1,19 @@
 # Day 1
 
 ## Solution
-Read input one character at a time and produce some control signals:
-- Current direction
-- Is char a digit?
-- Is char a newline?
-- Done? (end of transmission (0x04))
+Read one input character at a time and keep track of the current direction of
+each turn as the digits for that turn are parsed.
 
-The datapath reads each digit value and counts how often the dial reaches zero. 
-
-The two most recent digits encountered for each dial turn are stored. The 
+Store the two most recent digits encountered for each dial turn. The 
 numbers are conveniently represented in decimal, which removes the need for 
-explicit division or modulo operations to account for the 100-tick dial. 
+explicit division or modulo operations.
+
+Based on the current position, direction, and rotation amount, calculate the 
+result position. For part 1, increment the result when this position
+lands on zero. For part 2, there is additional logic to account for the dial
+passing zero (potentially multiple times in one turn). Instead of incrementing
+tick-by-tick, some casing can be done to determine how many times zero was
+passed in a turn.
 
 Processing time is linear in the number of puzzle input characters. Overall
 performance is limited by UART throughput when running on a real FPGA. 

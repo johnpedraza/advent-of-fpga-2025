@@ -10,7 +10,7 @@ module I = struct
     { clock : 'a
     ; reset_n : 'a
     ; uart_rx : 'a
-    ; part_select : 'a (* Switch on board to select which result (part 1 or 2) to display *)
+    ; part_select : 'a (* Switch to select which result (part 1 or 2) to display *)
     }
   [@@deriving hardcaml]
 end
@@ -27,7 +27,7 @@ end
 
 let create scope ({ clock; reset_n; uart_rx; part_select } : _ I.t) : _ O.t =
   let receiver = Uart_rx.hierarchical scope { clock; reset_n; rx = uart_rx } in
-  let solution = Solution.create { clock; reset_n; ascii = receiver.rx_byte } in
+  let solution = Solution.create scope { clock; reset_n; ascii = receiver.rx_byte } in
   let num_to_display = mux2 part_select solution.result_part2 solution.result_part1 in
   let display =
     Seven_segment_display.hierarchical scope { clock; reset_n; num = num_to_display }
