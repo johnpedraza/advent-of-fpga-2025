@@ -5,7 +5,7 @@ open! Hardcaml
 open! Signal
 
 let num_bits = 32
-let word_width = 32
+let word_width = 8
 let bram_size = 65536
 let bram_addr_width = 16
 
@@ -55,14 +55,15 @@ let adjacent_adders ~curr_top ~curr_mid ~curr_bot =
   let center = word_width in
   let right = word_width - 1 in
   List.init word_width ~f:(fun i ->
-    uresize ~width:num_bits curr_top.:[left - i, left - i]
-    +: uresize ~width:num_bits curr_top.:[center - i, center - i]
-    +: uresize ~width:num_bits curr_top.:[right - i, right - i]
-    +: uresize ~width:num_bits curr_mid.:[left - i, left - i]
-    +: uresize ~width:num_bits curr_mid.:[right - i, right - i]
-    +: uresize ~width:num_bits curr_bot.:[left - i, left - i]
-    +: uresize ~width:num_bits curr_bot.:[center - i, center - i]
-    +: uresize ~width:num_bits curr_bot.:[right - i, right - i])
+    tree ~arity:2 ~f:(reduce ~f:( +: ))
+    [uresize ~width:num_bits curr_top.:[left - i, left - i]
+    ; uresize ~width:num_bits curr_top.:[center - i, center - i]
+    ; uresize ~width:num_bits curr_top.:[right - i, right - i]
+    ; uresize ~width:num_bits curr_mid.:[left - i, left - i]
+    ; uresize ~width:num_bits curr_mid.:[right - i, right - i]
+    ; uresize ~width:num_bits curr_bot.:[left - i, left - i]
+    ; uresize ~width:num_bits curr_bot.:[center - i, center - i]
+    ; uresize ~width:num_bits curr_bot.:[right - i, right - i]])
 ;;
 
 (* Given the word_width sums and the middle row containing whether or not that
@@ -76,7 +77,7 @@ let sum_of_movable_rolls ~curr_top ~curr_mid ~curr_bot =
   let movable_roll_list =
     List.map2_exn ~f:(fun a b -> uresize ~width:num_bits (a &: b)) row_list movable_spots
   in
-  reduce ~f:( +: ) movable_roll_list
+  tree ~arity:2 ~f:(reduce ~f:( +: )) movable_roll_list
 ;;
 
 let create scope ({ clock; reset_n; ascii_char } : _ I.t) : _ O.t =

@@ -95,7 +95,18 @@ either read the next 8 columns from BRAM or move down to the start of the next
 row.
 
 ## Performance
-Loading the puzzle input into BRAM is limited by UART throughput. 
+The overall runtime is dominated by I/O. Loading the puzzle input into BRAM 
+is limited by UART throughput. 
 
-Processing the puzzle input from BRAM takes time proportional to
-number of characters / word width.
+Processing the puzzle input once it has been loaded into BRAM takes time 
+proportional to number of characters / word width. For the ~18,000 character
+input, processing took 12,150 cycles. 
+
+This could be improved by traversing in column-major order. That is, instead of 
+fetching 3 new words after doing the accessibility check, fetch the word "below" 
+the current bottom row, reusing 2 of the 3 current rows. This would probably 
+yield a ~3x performance boost.
+
+The current design meets timing at 100MHz using 8-bit word width. Some of the 
+wider additions needed to be rearranged into a tree structure, and Hardcaml's 
+`tree` made this straightforward.

@@ -46,6 +46,6 @@ let%expect_test "Test Day 04 Solution" =
   Harness.run_advanced ~create:Solution.hierarchical testbench;
   [%expect {|
     Part 1 Example: 13
-    Num cycles:     100
+    Num cycles:     150
     |}]
 ;;
