@@ -8,6 +8,7 @@ let num_bits = 32
 let word_width = 8
 let bram_size = 65536
 let bram_addr_width = 16
+let eot = 0x04 (* End of Transmission *)
 
 module I = struct
   type 'a t =
@@ -162,7 +163,7 @@ let create scope ({ clock; reset_n; ascii_char } : _ I.t) : _ O.t =
                 ascii_char.valid
                 [ prev_char <-- ascii_char.value
                 ; if_
-                    (ascii_char.value ==: of_char 'x')
+                    (ascii_char.value ==:. eot)
                     [ sm.set_next Read_top_row (* Begin processing *)
                     ; all_input_received <-- vdd
                     ]

@@ -19,13 +19,21 @@ let testbench (sim : Harness.Sim.t) =
       inputs.ascii_char.valid := Bits.vdd;
       inputs.ascii_char.value := Bits.of_char c;
       cycle ();
-      inputs.ascii_char.valid := Bits.gnd)
+      inputs.ascii_char.valid := Bits.gnd;
+      cycle ();
+      )
   in
   let input_text = In_channel.read_all "../input/example.txt" in
   let input_chars = String.to_list input_text in
   send_ascii input_chars;
+  inputs.ascii_char.valid := Bits.vdd;
+  inputs.ascii_char.value := Bits.of_unsigned_int ~width:8 0x04;
+  cycle ();
+  inputs.ascii_char.valid := Bits.gnd;
+  cycle ();
+
   cycle ~n:10 ();
-  Stdio.printf "Part 2 Example: %d\n" (Bits.to_unsigned_int !(outputs.total_joltage))
+  Stdio.printf "Part 2 Example: %d\n" (Bits.to_unsigned_int !(outputs.total_joltage));
 ;;
 
 let%expect_test "Test Day 03 Solution" =

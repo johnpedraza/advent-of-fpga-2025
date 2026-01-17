@@ -20,11 +20,17 @@ let testbench (sim : Harness.Sim.t) =
       inputs.ascii_char.value := Bits.of_char c;
       cycle ();
       inputs.ascii_char.valid := Bits.gnd;
-      cycle ~n:3 ())
+      cycle ~n:3 ()
+      )
   in
   let input_text = In_channel.read_all "../input/example.txt" in
   let input_chars = String.to_list input_text in
   send_ascii input_chars;
+  inputs.ascii_char.valid := Bits.vdd;
+  inputs.ascii_char.value := Bits.of_unsigned_int ~width:8 0x04;
+  cycle ();
+  inputs.ascii_char.valid := Bits.gnd;
+  cycle ~n:3 ();
   let wait_for_done ~timeout =
     let rec loop n =
       if n = 0
@@ -46,6 +52,6 @@ let%expect_test "Test Day 04 Solution" =
   Harness.run_advanced ~create:Solution.hierarchical testbench;
   [%expect {|
     Part 1 Example: 13
-    Num cycles:     150
+    Num cycles:     165
     |}]
 ;;

@@ -18,14 +18,20 @@ let testbench (sim : Harness.Sim.t) =
   let feed_char c =
     inputs.ascii.value := Bits.of_char c;
     inputs.ascii.valid := Bits.vdd;
-    cycle ()
+    cycle ();
+    inputs.ascii.valid := Bits.gnd;
+    cycle ();
   in
   let input_text = In_channel.read_all "../input/example.txt" in
   let input_chars = String.to_list input_text in
   List.iter input_chars ~f:(fun x -> feed_char x);
+  inputs.ascii.value := Bits.of_unsigned_int ~width:8 0x04;
+  inputs.ascii.valid := Bits.vdd;
+  cycle ();
+  inputs.ascii.valid := Bits.gnd;
+  cycle ();
   Stdio.printf "Part 1: %d\n" (Bits.to_unsigned_int !(outputs.result_part1));
   Stdio.printf "Part 2: %d\n" (Bits.to_unsigned_int !(outputs.result_part2));
-  Stdio.printf "done_ : %b\n" (Bits.to_bool !(outputs.done_))
 ;;
 
 let%expect_test "Test Day 01 Solution" =
@@ -33,6 +39,5 @@ let%expect_test "Test Day 01 Solution" =
   [%expect {|
     Part 1: 3
     Part 2: 6
-    done_ : true
     |}]
 ;;

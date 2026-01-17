@@ -6,6 +6,7 @@ open! Signal
 
 let num_bits = 64
 let num_batteries = 12 (* Changing this value to 2 will yield solution to part 1 *)
+let eot = 0x04 (* End of Transmission *)
 
 module I = struct
   type 'a t =
@@ -108,7 +109,7 @@ let create scope ({ clock; reset_n; ascii_char } : _ I.t) : _ O.t =
                     ; on_batteries <--. 0 (* reset battery bank for next line *)
                     ]
                     [ if_
-                        (ascii_char.value ==: of_char 'x')
+                        (ascii_char.value ==:. eot)
                         [ sm.set_next Done ]
                         [ when_
                             (max_possibility >: on_batteries.value)

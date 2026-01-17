@@ -5,6 +5,7 @@ open! Hardcaml
 open! Signal
 
 let num_bits = 32
+let eot = 0x04 (* End of Transmission *)
 
 module I = struct
   type 'a t =
@@ -92,7 +93,7 @@ let create scope ({ clock; reset_n; ascii } : _ I.t) : _ O.t =
         [ sm.switch
             [ ( Direction
               , [ if_
-                    (ascii.value ==: of_char 'x')
+                    (ascii.value ==:. eot)
                     [ sm.set_next Done; done_ <-- vdd ]
                     [ sm.set_next Turn
                     ; if_
