@@ -28,7 +28,7 @@ At this point one might arrive at the following solution:
 
 For each machine...
 1. Count up from 0 to 8191
-2. For each '1' bit in the counter, include that button in an XOR operation between
+2. For each `1` bit in the counter, include that button in an XOR operation between
 all buttons to press
 3. Are the indicator lights correct? If so, do a popcount of the counter, compare 
 that to the current minimum number of button presses for that machine, and 
@@ -52,15 +52,19 @@ selection of one button at a time between subsets...
 
 Fortune is upon us. Using Gray codes solves our problems :-)
 
-Initialize a B-bit counter, where B is the maximum number of buttons per machine.
+Maintain an accumulator with a width equal to the number of indicator lights. 
+Initialize it to all zeros.
+
+Maintain a B-bit counter, where B is the maximum number of buttons per machine.
 Increment this counter once per cycle, like last time, but keep track of the Gray 
 code at each step.
 
-At each step between two permutations, only ONE button is switched on/off.
-Which button? The XOR of two adjacent Gray codes yields a onehot value where the
-'1' is at the location of the toggle.
+At each step between two permutations, only *one* button is switched on/off. This
+is the key propery of Gray codes that helps us here: as you increment the counter,
+adjacent Gray codes differ by exactly 1 bit.
 
-This is exactly which button should be toggled on this cycle. So do
+Which button is toggled? The XOR of two adjacent Gray codes yields a onehot value where the
+`1` is at the location of the toggle. So use that index and do
 `acc = acc ^ Buttons[toggle idx]`
 
 At this point, check if the accumulator matches the desired light pattern.
@@ -72,10 +76,15 @@ the accumulator and one button. This saves on routing, LUTs, and propagation
 delay. And it still only takes 2^B cycles per machine to find
 the result.
 
-So we have a solver for a single machine. What now? Design a job dispatcher
-and assign parsed inputs to any that are on standby? Sure, or just instantiate
-exactly 166 of them. One for each machine. There shall always be exactly 166
+We have a solver for a single machine. What now? Design a job dispatcher
+and assign parsed inputs to any solvers that are available? Sure, or just instantiate
+exactly 166 of them. One for each machine. The Elves don't need any more
 machines.
+
+## Potential Improvements
+Yeah okay it's a little silly to have a dedicated machine solver for each line
+of the input. A more realistic solution would include a FIFO on the output of the
+parser and add some dispatching logic.
 
 ## Performance / Area
 The overall runtime is dominated by UART I/O. Once the entire input has streamed 
@@ -83,16 +92,14 @@ into the FPGA, processing takes an additional ~8200 cycles. This design meets
 timing at 100MHz, so the latency of each machine solver is ~82 microseconds.
 
 Some stats:
+
 ![FPGA Resource Utilization Table](./images/utilization_table.png "FPGA Resource Utilization Table")
 
 Huge fan of the wavy shape Vivado went for with the schematic:
+
 ![Fun Wavy Schematic](./images/schematic.png "Fun Wavy Schematic")
 
 I paid for all the LUTs, I'm gonna use all the LUTs (all = 58.96%)
+
 ![Device View](./images/device.png "Device View")
 
-## Potential Improvements
-Yeah okay it's a little silly to have a dedicated machine solver for each line
-of the input. A more realistic solution would include a FIFO on the output of the
-parser and a dispatcher to deliver the parsed line to a solver once one becomes
-available.
