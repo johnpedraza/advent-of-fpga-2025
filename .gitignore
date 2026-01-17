@@ -9,8 +9,5 @@ vivado/
 # Constraints file (Nexys A7)
 constraints.xdc
 
-# Puzzle inputs
-input/
-
-# WIP
-day02/
+# Full puzzle inputs
+full.txt
