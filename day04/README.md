@@ -100,7 +100,7 @@ is limited by UART throughput.
 
 Processing the puzzle input once it has been loaded into BRAM takes time 
 proportional to number of characters / word width. For the ~18,000 character
-input, processing took 12,150 cycles. 
+input, processing took 12,150 cycles.
 
 This could be improved by traversing in column-major order. That is, instead of 
 fetching 3 new words after doing the accessibility check, fetch the word "below" 
