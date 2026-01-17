@@ -13,5 +13,19 @@ computer to my FPGA via UART, terminating the transmission with a 0x4 byte
 (EOT).
 
 # Solutions
-Each day's subdirectory will have its own README describing my solutions.
+Each day's subdirectory has its own README describing my solutions.
 
+# Instructions
+If you want to run the tests yourself, first install a few things:
+- [opam](https://opam.ocaml.org/)
+- [The OxCaml Compiler](https://oxcaml.org/get-oxcaml/), also follow the instructions
+on that webpage to use the `5.2.0+ox` switch
+
+and some packages:
+`opam install hardcaml hardcaml_waveterm ppx_hardcaml core utop dune`
+
+If you then run `dune test`, you can see the results of the expect tests in each
+day's `test/test_solution.ml` file. If you'd like to test the full input,
+copy it from the Advent of Code website into that day's corresponding
+`input/` directory and edit the line in `test_solution.ml` to
+target that file instead of the example input.
