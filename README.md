@@ -14,7 +14,7 @@ computer to my FPGA via UART, terminating the transmission with a 0x4 byte
 
 # Solutions
 Each day's subdirectory has its own README describing my solutions. If you only
-feel like reading one of them, Day 10 is pretty neat.
+feel like reading one of them, Day 10 (part 1) is pretty neat.
 
 # Instructions
 If you want to run the tests yourself, first install a few things:
