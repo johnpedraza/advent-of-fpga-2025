@@ -77,16 +77,19 @@ and assign parsed inputs to any that are on standby? Sure, or just instantiate
 exactly 166 of them. One for each machine. There shall always be exactly 166
 machines.
 
-## Performance
-Once the entire input has streamed into the FPGA, processing takes an additional
-~8200 cycles. This design meets timing at 100MHz, so the latency of each machine
-solver is 82 microseconds.
+## Performance / Area
+The overall runtime is dominated by UART I/O. Once the entire input has streamed 
+into the FPGA, processing takes an additional ~8200 cycles. This design meets 
+timing at 100MHz, so the latency of each machine solver is ~82 microseconds.
 
 Some stats:
-- LUT: 38371 (61%)
-- FF: 28481 (22%)
-
 ![FPGA Resource Utilization Table](./images/utilization_table.png "FPGA Resource Utilization Table")
+
+Huge fan of the wavy shape Vivado went for with the schematic:
+![Fun Wavy Schematic](./images/schematic.png "Fun Wavy Schematic")
+
+I paid for all the LUTs, I'm gonna use all the LUTs (all = 58.96%)
+![Device View](./images/device.png "Device View")
 
 ## Potential Improvements
 Yeah okay it's a little silly to have a dedicated machine solver for each line

@@ -13,7 +13,8 @@ computer to my FPGA via UART, terminating the transmission with a 0x4 byte
 (EOT).
 
 # Solutions
-Each day's subdirectory has its own README describing my solutions.
+Each day's subdirectory has its own README describing my solutions. If you only
+feel like reading one of them, Day 10 is pretty neat.
 
 # Instructions
 If you want to run the tests yourself, first install a few things:
@@ -28,4 +29,5 @@ If you then run `dune test`, you can see the results of the expect tests in each
 day's `test/test_solution.ml` file. If you'd like to test the full input,
 copy it from the Advent of Code website into that day's corresponding
 `input/` directory and edit the line in `test_solution.ml` to
-target that file instead of the example input.
+target that file instead of the example input. **Note:** For Day 10 there is an
+additional step to test the full input. See the Day 10 README for more details.
