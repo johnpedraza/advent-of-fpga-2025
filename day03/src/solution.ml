@@ -18,7 +18,7 @@ end
 
 module O = struct
   type 'a t =
-    { total_joltage_part1 : 'a [@bits num_bits]
+    { total_joltage : 'a [@bits num_bits]
     ; done_ : 'a
     }
   [@@deriving hardcaml]
@@ -120,7 +120,7 @@ let create scope ({ clock; reset_n; ascii_char } : _ I.t) : _ O.t =
             ]
         ]
     ];
-  { total_joltage_part1 = total_joltage.value; done_ = done_.value }
+  { total_joltage = total_joltage.value; done_ = done_.value }
 ;;
 
 let hierarchical scope =

@@ -25,7 +25,7 @@ let testbench (sim : Harness.Sim.t) =
   let input_chars = String.to_list input_text in
   send_ascii input_chars;
   cycle ~n:10 ();
-  Stdio.printf "Part 2 Example: %d\n" (Bits.to_unsigned_int !(outputs.total_joltage_part1))
+  Stdio.printf "Part 2 Example: %d\n" (Bits.to_unsigned_int !(outputs.total_joltage))
 ;;
 
 let%expect_test "Test Day 03 Solution" =
