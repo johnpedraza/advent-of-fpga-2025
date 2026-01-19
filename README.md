@@ -22,12 +22,23 @@ If you want to run the tests yourself, first install a few things:
 - [The OxCaml Compiler](https://oxcaml.org/get-oxcaml/), also follow the instructions
 on that webpage to use the `5.2.0+ox` switch
 
-and some packages:
-`opam install hardcaml hardcaml_waveterm ppx_hardcaml core utop dune`
+Install some libraries:
+```
+opam install -y hardcaml hardcaml_test_harness hardcaml_waveterm ppx_hardcaml
 
-If you then run `dune test`, you can see the results of the expect tests in each
-day's `test/test_solution.ml` file. If you'd like to test the full input,
+opam install -y core core_unix ppx_jane rope re dune utop
+```
+
+If you then run `dune test` and `dune promote`, you can see the results of the expect tests in each
+day's `test/test_solution.ml` file (you may need to close and re-open the file to
+see the changes). If you'd like to test the full input,
 copy it from the Advent of Code website into that day's corresponding
-`input/` directory and edit the line in `test_solution.ml` to
-target that file instead of the example input. **Note:** For Day 10 there is an
+`input/` directory as a `.txt` file and edit the following line in that day's
+`test_solution.ml` file to target the new file instead of the example input:
+
+```
+let input_text = In_channel.read_all "../input/example.txt" in
+```
+
+**Note:** For Day 10 there is an
 additional step to test the full input. See the Day 10 README for more details.
